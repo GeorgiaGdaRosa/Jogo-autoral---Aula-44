@@ -29,16 +29,28 @@ function draw() {
 
    drawSprites()
    text("x:" + mouseX + "y:" + mouseY, mouseX, mouseY)
+
 }
 
 function playerControls() {
    bg.velocityX = 0
+   
    girl.changeAnimation("girlBlink")
    if (keyIsDown(RIGHT_ARROW)) {
       girl.changeAnimation("walk", girlWalk)
       bg.velocityX = -1
+      girl.x += 2
    }
+
+   if (keyIsDown(LEFT_ARROW)) {
+      girl.changeAnimation("walk", girlWalk)
+      girl.x -= 2
+      bg.velocityX = 1
+   }
+
 }
+
+
 
 
 
