@@ -2,16 +2,20 @@ var bg, backgroundImg
 var girl, girlBlink, girlWalk
 var solo
 var plataformaPosition=[
-   {x:320,y:250},
-   {x:500,y:230},
-   {x:1000,y:250}
+   {x:320,y:230},
+   {x:500,y:200},
+   {x:1000,y:220},
+   {x:1500,y:230},
+   {x:1700,y:200}
 ]
 var plataformas 
+var plataformaImg
 
 function preload() {
    backgroundImg = loadImage("./assets/background2.png")
    girlBlink = loadAnimation("./assets/blink_1.png", "./assets/blink_2.png", "./assets/blink_3.png", "./assets/blink_4.png")
    girlWalk = loadAnimation("./assets/walk_1.png", "./assets/walk_2.png", "./assets/walk_3.png", "./assets/walk_4.png", "./assets/walk_5.png", "./assets/walk_6.png", "./assets/walk_7.png")
+   plataformaImg = loadImage("./assets/ground.png")
 }
 
 function setup() {
@@ -28,6 +32,8 @@ function setup() {
    for(var i = 0;i<plataformaPosition.length;i++){
       var plataforma = createSprite(plataformaPosition[i].x,plataformaPosition[i].y,50,20)
       plataformas.add(plataforma)
+      plataforma.addImage(plataformaImg)
+      plataforma.scale = 0.6
    }
 }
 
