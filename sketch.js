@@ -13,13 +13,19 @@ var plataformaImg
 var bordas
 var bearImg, bearGroup
 var bearPositions=[
-   {x:350,y:250}
+   {x:350,y:280}
 ]
 var bearDirection="right"
 var beeImg, beeGroup
-var beePositions= []
+var beePositions= [
+   {x:360,y:150}
+]
+var beeDirection = "left"
 var wolfImg, wolfGroup
-var wolfPositions= []
+var wolfPositions= [
+   {x:500,y:270}
+]
+var wolfDirection = "right"
 
 function preload() {
    backgroundImg = loadImage("./assets/background2.png")
@@ -53,6 +59,8 @@ function setup() {
    beeGroup = new Group()
    wolfGroup = new Group()
    spawBears()
+   spawBees()
+   spawWolfs()
    
 
 }
@@ -66,27 +74,54 @@ function draw() {
       bg.x = bg.width / 2
    }
 
+
    playerControls()
    
-   
+   if (frameCount % 200 === 0){
+      if(bearDirection == "right"){
+         bearGroup.setVelocityXEach(0.5)
+         bearGroup.setMirrorXEach(1)
+         bearDirection = "left"
+      } else{ 
+         bearGroup.setVelocityXEach(-0.5)
+         bearGroup.setMirrorXEach(-1)
+         bearDirection = "right"
+
+      }
+   }
+
+   if (frameCount % 100 === 0){
+      if(beeDirection == "left"){
+         beeGroup.setVelocityXEach(-0.5)
+         beeGroup.setMirrorXEach(-1)
+         beeDirection = "right"
+      } else{ 
+         beeGroup.setVelocityXEach(0.5)
+         beeGroup.setMirrorXEach(1)
+         beeDirection = "left"
+
+      }
+   }
+
+   if (frameCount % 200 === 0){
+      if(wolfDirection == "right"){
+         wolfGroup.setVelocityXEach(0.5)
+         wolfGroup.setMirrorXEach(1)
+         wolfDirection = "left"
+      } else{ 
+         wolfGroup.setVelocityXEach(-0.5)
+         wolfGroup.setMirrorXEach(-1)
+         wolfDirection = "right"
+
+      }
+   }
+
 
    
    drawSprites()
    text("x:" + mouseX + "y:" + mouseY, mouseX, mouseY)
-   // setTimeout(() => {
-   //    if(bearDirection == "right"){
-   //       bearGroup.setVelocityXEach(0.5)
-   //       bearGroup.setMirrorXEach(1)
-   //       bearDirection = "left"
-   //    } else{ 
-   //       bearGroup.setVelocityXEach(-0.5)
-   //       bearGroup.setMirrorXEach(-1)
-   //       bearDirection = "right"
-
-   //    }
-   // }, 2000);
+  
    
-
 }
 
 function playerControls() {
@@ -167,15 +202,35 @@ function spawBears(){
       bear.scale = 0.8
       bear.velocityY = 0.5
       bearGroup.add(bear)
-      
-
-      
+       
    }
 }
 
-function moveBears(){
-
+function spawBees(){
+   
+   for(var i=0; i< beePositions.length; i++){
+      var bee = createSprite(beePositions[i].x, beePositions[i].y)
+      bee.addImage(beeImg)
+      bee.scale = 0.5
+      bee.velocityX = 0.5
+      beeGroup.add(bee)
+       
+   }
 }
+
+function spawWolfs(){
+   
+   for(var i=0; i< wolfPositions.length; i++){
+      var wolf = createSprite(wolfPositions[i].x, wolfPositions[i].y)
+      wolf.addAnimation("wolf", wolfImg)
+      wolf.velocityX = 0.5
+      wolfGroup.add(wolf)
+       
+   }
+}
+
+
+
 
 
 
