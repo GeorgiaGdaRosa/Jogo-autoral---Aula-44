@@ -13,7 +13,7 @@ var plataformaImg
 var bordas
 var bearImg, bearGroup
 var bearPositions=[
-   {x:350,y:280}
+   {x:200,y:270}
 ]
 var bearDirection="right"
 var beeImg, beeGroup
@@ -26,6 +26,7 @@ var wolfPositions= [
    {x:500,y:270}
 ]
 var wolfDirection = "right"
+var girlDirection = null
 
 function preload() {
    backgroundImg = loadImage("./assets/background2.png")
@@ -46,7 +47,7 @@ function setup() {
    girl.addAnimation("girlBlink", girlBlink)
    girl.addAnimation("walk", girlWalk)
    solo = createSprite(width/2,height-10,width,10)
-   solo.visible = true
+   solo.visible = false
    plataformas = new Group()
    for(var i = 0;i<plataformaPosition.length;i++){
       var plataforma = createSprite(plataformaPosition[i].x,plataformaPosition[i].y,50,20)
@@ -68,36 +69,49 @@ function setup() {
 function draw() {
    background(220)
    girl.collide(bordas)
-   bearGroup.collide(solo)
+   
    
    if (bg.x < -350) {
       bg.x = bg.width / 2
    }
 
 
+
    playerControls()
    
+   console.log(girlDirection)
+
    if (frameCount % 200 === 0){
-      if(bearDirection == "right"){
+      if(bearDirection == "right" && girlDirection !== "left"){
          bearGroup.setVelocityXEach(0.5)
          bearGroup.setMirrorXEach(1)
          bearDirection = "left"
-      } else{ 
+      } else if(bearDirection == "left" && girlDirection !== "right"){ 
          bearGroup.setVelocityXEach(-0.5)
+         bearGroup.setMirrorXEach(-1)
+         bearDirection = "right"
+
+      } else if(bearDirection == "right" && girlDirection == "left"){
+         bearGroup.setVelocityXEach(14)
+         bearGroup.setMirrorXEach(1)
+         bearDirection = "left"
+      } else if(bearDirection == "left" && girlDirection == "right"){ 
+         bearGroup.setVelocityXEach(-14)
          bearGroup.setMirrorXEach(-1)
          bearDirection = "right"
 
       }
    }
 
+
    if (frameCount % 100 === 0){
       if(beeDirection == "left"){
          beeGroup.setVelocityXEach(-0.5)
-         beeGroup.setMirrorXEach(-1)
+         beeGroup.setMirrorXEach(1)
          beeDirection = "right"
       } else{ 
          beeGroup.setVelocityXEach(0.5)
-         beeGroup.setMirrorXEach(1)
+         beeGroup.setMirrorXEach(-1)
          beeDirection = "left"
 
       }
@@ -136,6 +150,7 @@ function playerControls() {
       bg.velocityX = -1
       plataformas.setVelocityXEach(-1)
       girl.x += 1
+      girlDirection = "right"
    }
 
    if (keyIsDown(LEFT_ARROW)) {
@@ -144,6 +159,11 @@ function playerControls() {
       girl.x -= 1
       bg.velocityX = 1
       plataformas.setVelocityXEach(1)
+      girlDirection = "left"
+   }
+
+   if(bg.velocityX == 0){
+      girlDirection = null
    }
 
   if (keyDown("space") && girl.y>=240){
@@ -200,8 +220,9 @@ function spawBears(){
       var bear = createSprite(bearPositions[i].x, bearPositions[i].y)
       bear.addAnimation("walk",bearImg)
       bear.scale = 0.8
-      bear.velocityY = 0.5
+      bear.velocityX = 0.8
       bearGroup.add(bear)
+      
        
    }
 }
@@ -212,8 +233,10 @@ function spawBees(){
       var bee = createSprite(beePositions[i].x, beePositions[i].y)
       bee.addImage(beeImg)
       bee.scale = 0.5
-      bee.velocityX = 0.5
+      bee.velocityX = 0.8
+      bee.mirrorX(-1)
       beeGroup.add(bee)
+      
        
    }
 }
@@ -223,7 +246,7 @@ function spawWolfs(){
    for(var i=0; i< wolfPositions.length; i++){
       var wolf = createSprite(wolfPositions[i].x, wolfPositions[i].y)
       wolf.addAnimation("wolf", wolfImg)
-      wolf.velocityX = 0.5
+      wolf.velocityX = 0.8
       wolfGroup.add(wolf)
        
    }
