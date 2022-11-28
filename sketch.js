@@ -28,7 +28,7 @@ var wolfPositions = [
 var wolfDirection = "right"
 var girlDirection = null
 var heart1, heart2, heart3, heartImg
-
+var tinta1, tinta1Img, tinta2, tinta2Img, tinta3, tinta3Img, tinta4, tinta4Img, tinta5, tinta5Img
 
 function preload() {
    backgroundImg = loadImage("./assets/background2.png")
@@ -39,6 +39,11 @@ function preload() {
    beeImg = loadImage("./assets/bee.png")
    wolfImg = loadAnimation("./assets/wolf_walk1.png", "./assets/wolf_walk2.png", "./assets/wolf_walk3.png", "./assets/wolf_walk4.png", "./assets/wolf_walk5.png")
    heartImg = loadImage("./assets/heart.png")
+   tinta1Img = loadImage("./assets/black_paint.png")
+   tinta2Img = loadImage("./assets/blue_paint.png")
+   tinta3Img = loadImage("./assets/red_paint.png")
+   tinta4Img = loadImage("./assets/white_paint.png")
+   tinta5Img = loadImage("./assets/yellow_paint.png")
 }
 
 function setup() {
@@ -57,6 +62,10 @@ function setup() {
    heart3 = createSprite(100,20)
    heart3.addImage(heartImg)
    heart3.scale = 0.2
+
+   tinta1 = createSprite(325,200)
+   tinta1.addImage(tinta1Img)
+   tinta1.scale = 0.3
 
    girl = createSprite(30, 240)
    girlBlink.frameDelay = 10
@@ -179,6 +188,9 @@ function draw() {
       girl.x = 30
 }
 
+   if(girl.collide(tinta1)){
+      tinta1.visible = false
+   }
 
    drawSprites()
    text("x:" + mouseX + "y:" + mouseY, mouseX, mouseY)
