@@ -6,7 +6,7 @@ var plataformaPosition = [
    { x: 500, y: 200 },
    { x: 1000, y: 220 },
    { x: 1500, y: 230 },
-   { x: 1700, y: 200 }
+   { x: 1700, y: 190 }
 ]
 var plataformas
 var plataformaImg
@@ -18,17 +18,30 @@ var bearPositions = [
 var bearDirection = "right"
 var beeImg, beeGroup
 var beePositions = [
-   { x: 360, y: 150}
+   { x: 500, y: 150}
 ]
 var beeDirection = "right"
 var wolfImg, wolfGroup
 var wolfPositions = [
-   { x: 500, y: 270}
+   { x:900, y: 270}
 ]
 var wolfDirection = "right"
 var girlDirection = null
 var heart1, heart2, heart3, heartImg
-var tinta1, tinta1Img, tinta2, tinta2Img, tinta3, tinta3Img, tinta4, tinta4Img, tinta5, tinta5Img
+var tinta1, tinta1Img, tinta2, tinta2Img, tinta3, tinta3Img, tinta4, tinta4Img, tinta5, tinta5Img, tintas
+var tintasPositions = [
+   {x:323, y:200},
+   {x:760, y:270},
+   {x:1000, y:190},
+   {x:1300, y:270},
+   {x:1700, y:160 }
+
+]
+var tintasImg = []
+var countTintas = 0
+var life = 3
+var paintPalette, paintPaletteImg
+var gameState = "PLAY"
 
 function preload() {
    backgroundImg = loadImage("./assets/background2.png")
@@ -44,6 +57,7 @@ function preload() {
    tinta3Img = loadImage("./assets/red_paint.png")
    tinta4Img = loadImage("./assets/white_paint.png")
    tinta5Img = loadImage("./assets/yellow_paint.png")
+   paintPaletteImg = loadImage("./assets/paint_palette.png")
 }
 
 function setup() {
@@ -63,9 +77,17 @@ function setup() {
    heart3.addImage(heartImg)
    heart3.scale = 0.2
 
-   tinta1 = createSprite(325,200)
-   tinta1.addImage(tinta1Img)
-   tinta1.scale = 0.3
+   paintPalette = createSprite(1800, 250)
+   paintPalette.addImage(paintPaletteImg)
+   paintPalette.scale = 0.6
+   paintPalette.visible = false
+
+
+   tintasImg = [
+      tinta1Img, tinta2Img, tinta3Img, tinta4Img, tinta5Img
+   ]
+
+   
 
    girl = createSprite(30, 240)
    girlBlink.frameDelay = 10
@@ -88,11 +110,22 @@ function setup() {
    spawBees()
    spawWolfs()
 
-
+   tintas = new Group()
+   for(var i = 0;i < tintasPositions.length; i++) {
+      var tinta= createSprite(tintasPositions[i].x, tintasPositions[i].y, 20, 20)
+      //var j = i + 1
+      //var tintaImg = "tinta"+ j + "Img"
+      tinta.addImage(tintasImg[i])
+      tinta.scale = 0.3
+      tintas.add(tinta)
+}
 }
 
 function draw() {
    background(220)
+   if(gameState == "PLAY"){
+      
+   
    girl.collide(bordas)
    girl.collide(bearGroup)
    girl.collide(beeGroup)
@@ -102,13 +135,13 @@ function draw() {
       bg.x = bg.width / 2
    }
 
-
+   
 
    playerControls()
 
    // Ajustei a velocidade para a mesma que foi definida inicialmente na função que gera os inimigos 0.8
 
-   if (frameCount % 200 === 0) {
+   if (frameCount % 140 === 0) {
       if (bearDirection == "right" && girlDirection !== "left") {
          bearGroup.setVelocityXEach(0.8)
          bearGroup.setMirrorXEach(1)
@@ -120,11 +153,11 @@ function draw() {
 
          // Velocida oposta a garota ficou 2
       } else if (bearDirection == "right" && girlDirection == "left") {
-         bearGroup.setVelocityXEach(2)
+         bearGroup.setVelocityXEach(1.5)
          bearGroup.setMirrorXEach(1)
          bearDirection = "left"
       } else if (bearDirection == "left" && girlDirection == "right") {
-         bearGroup.setVelocityXEach(-2)
+         bearGroup.setVelocityXEach(-1.5)
          bearGroup.setMirrorXEach(-1)
          bearDirection = "right"
 
@@ -132,7 +165,7 @@ function draw() {
    }
 
 
-   if (frameCount % 100 === 0) {
+   if (frameCount % 200 === 0) {
       if (beeDirection == "left" && girlDirection !== "right") {
          beeGroup.setVelocityXEach(-0.8)
          beeGroup.setMirrorXEach(1)
@@ -142,11 +175,11 @@ function draw() {
          beeGroup.setMirrorXEach(-1)
          beeDirection = "left"
       } else if (beeDirection == "left" && girlDirection == "right") {
-         beeGroup.setVelocityXEach(-2)
+         beeGroup.setVelocityXEach(-1.5)
          beeGroup.setMirrorXEach(1)
          beeDirection = "right"
       } else if (beeDirection == "right" && girlDirection == "left") {
-         beeGroup.setVelocityXEach(2)
+         beeGroup.setVelocityXEach(1.5)
          beeGroup.setMirrorXEach(-1)
          beeDirection = "left"
       }
@@ -163,44 +196,74 @@ function draw() {
          wolfDirection = "right"
 
       }else if (wolfDirection == "right" && girlDirection == "left") {
-         wolfGroup.setVelocityXEach(2)
+         wolfGroup.setVelocityXEach(1.5)
          wolfGroup.setMirrorXEach(1)
          wolfDirection = "left"
       } else if (wolfDirection == "left" && girlDirection == "right"){
-         wolfGroup.setVelocityXEach(-2)
+         wolfGroup.setVelocityXEach(-1.5)
          wolfGroup.setMirrorXEach(-1)
          wolfDirection = "right"
 
       }
    }
 
-   if(girl.collide(bearGroup || beeGroup || wolfGroup)){
-      heart3.visible = false
+   if(girl.collide(bearGroup) || girl.collide(beeGroup) || girl.collide(wolfGroup)){
+      if(life == 3){
+         heart3.visible = false
+         life --
+      
+      } else if(life== 2){
+         heart2.visible = false
+         life --
+      
+      } else if (life == 1){
+         heart1.visible = false
+         life --
+         gameState == "END"
+      }
    }  
    
-   if(girl.collide(bearGroup || beeGroup || wolfGroup) && heart3.visible == false){
-      heart2.visible = false
-      girl.x = 30
-   } 
-   
-   if(girl.collide(bearGroup || beeGroup || wolfGroup) && heart3.visible == false && heart2.visible == false){
-      heart1.visible = false
-      girl.x = 30
+
+   // if(girl.collide(tinta1)){
+   //    tinta1.visible = false
+   // }
+
+   tintasCollect()
+
+   if(countTintas == 5){
+      paintPalette.visible = true
+   }
 }
 
-   if(girl.collide(tinta1)){
-      tinta1.visible = false
+   if(girl.overlap(paintPalette)){
+      text("Parabéns, você pegou todas as tintas!", 700, 350)
+      paintPalette.remove()
+      bearGroup.destroyEach()
+      beeGroup.destroyEach()
+      wolfGroup.destroyEach()
+   }
+
+   if(gameState == "END"){
+      textSize(20)
+      text("Acabaram suas vidas", )
+      
+      
    }
 
    drawSprites()
    text("x:" + mouseX + "y:" + mouseY, mouseX, mouseY)
-  
+   text("Tintas:"+countTintas, 585, 15)
+
+   
+   
 
 }
 
 function playerControls() {
    bg.velocityX = 0
    plataformas.setVelocityXEach(0)
+   tintas.setVelocityXEach(0)
+   paintPalette.velocityX = 0
    girl.collide(solo)
    girl.velocityY += 0.8
    girl.changeAnimation("girlBlink")
@@ -211,6 +274,8 @@ function playerControls() {
       girl.mirrorX(1)
       bg.velocityX = -1
       plataformas.setVelocityXEach(-1)
+      tintas.setVelocityXEach(-1)
+      paintPalette.velocityX = -1
       girl.x += 1
       girlDirection = "right"
    }
@@ -221,6 +286,8 @@ function playerControls() {
       girl.x -= 1
       bg.velocityX = 1
       plataformas.setVelocityXEach(1)
+      tintas.setVelocityXEach(1)
+      paintPalette.velocityX = 1
       girlDirection = "left"
    }
 
@@ -305,4 +372,12 @@ function spawWolfs() {
       wolf.velocityX = 0.8
       wolfGroup.add(wolf)
    }
+}
+
+function tintasCollect(){
+   girl.overlap(tintas,(collector, collected)=>{
+      countTintas ++
+      collected.remove()
+   })
+
 }
