@@ -6,7 +6,7 @@ var plataformaPosition = [
    { x: 500, y: 200 },
    { x: 1000, y: 220 },
    { x: 1500, y: 230 },
-   { x: 1700, y: 200 }
+   { x: 1700, y: 183 }
 ]
 var plataformas
 var plataformaImg
@@ -18,7 +18,7 @@ var bearPositions = [
 var bearDirection = "right"
 var beeImg, beeGroup
 var beePositions = [
-   { x: 1000, y: 150}
+   { x: 1000, y: 140}
 ]
 var beeDirection = "right"
 var wolfImg, wolfGroup
@@ -31,7 +31,7 @@ var heart1, heart2, heart3, heartImg
 var tinta1, tinta1Img, tinta2, tinta2Img, tinta3, tinta3Img, tinta4, tinta4Img, tinta5, tinta5Img, tintas
 var tintasPositions = [
    {x:323, y:200},
-   {x:500, y:170},
+   {x:1500, y:200},
    {x:760, y:270},
    {x:1000, y:190},
    {x:1300, y:270},
@@ -76,8 +76,10 @@ function setup() {
    heart3.addImage(heartImg)
    heart3.scale = 0.2
 
-   mixingBowl = createSprite(1700, 270)
+   mixingBowl = createSprite(1800, 260)
    mixingBowl.addImage(mixingBowlImg)
+   mixingBowl.scale = 0.6
+   mixingBowl.visible = false 
 
 
    tintasImg = [
@@ -228,7 +230,7 @@ function draw() {
    tintasCollect()
 
    if(countTintas == 5){
-      
+      mixingBowl.visible = true
    }
 }
 
@@ -249,6 +251,7 @@ function draw() {
 
 function playerControls() {
    bg.velocityX = 0
+   mixingBowl.velocityX = 0
    plataformas.setVelocityXEach(0)
    tintas.setVelocityXEach(0)
    girl.collide(solo)
@@ -260,6 +263,7 @@ function playerControls() {
       girl.changeAnimation("walk", girlWalk)
       girl.mirrorX(1)
       bg.velocityX = -1
+      mixingBowl.velocityX = -1
       plataformas.setVelocityXEach(-1)
       tintas.setVelocityXEach(-1)
       girl.x += 1
@@ -273,6 +277,7 @@ function playerControls() {
       bg.velocityX = 1
       plataformas.setVelocityXEach(1)
       tintas.setVelocityXEach(1)
+      mixingBowl.velocityX = 1
       girlDirection = "left"
    }
 
