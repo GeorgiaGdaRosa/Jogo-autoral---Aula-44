@@ -218,7 +218,7 @@ function draw() {
       } else if (life == 1){
          heart1.visible = false
          life --
-         gameState == "END"
+         gameState = "END"
       }
    }  
    
@@ -236,7 +236,7 @@ function draw() {
 
    if(gameState == "END"){
       textSize(20)
-      text("Acabaram suas vidas", )
+      text("Acabaram suas vidas", 200, 200)
       text("Clique no botão para recomeçar",)
       
    }
