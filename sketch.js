@@ -6,7 +6,7 @@ var plataformaPosition = [
    { x: 500, y: 200 },
    { x: 1000, y: 220 },
    { x: 1500, y: 230 },
-   { x: 1700, y: 190 }
+   { x: 1700, y: 200 }
 ]
 var plataformas
 var plataformaImg
@@ -18,12 +18,12 @@ var bearPositions = [
 var bearDirection = "right"
 var beeImg, beeGroup
 var beePositions = [
-   { x: 500, y: 150}
+   { x: 1000, y: 150}
 ]
 var beeDirection = "right"
 var wolfImg, wolfGroup
 var wolfPositions = [
-   { x:900, y: 270}
+   { x:1300, y: 270}
 ]
 var wolfDirection = "right"
 var girlDirection = null
@@ -31,16 +31,15 @@ var heart1, heart2, heart3, heartImg
 var tinta1, tinta1Img, tinta2, tinta2Img, tinta3, tinta3Img, tinta4, tinta4Img, tinta5, tinta5Img, tintas
 var tintasPositions = [
    {x:323, y:200},
+   {x:500, y:170},
    {x:760, y:270},
    {x:1000, y:190},
    {x:1300, y:270},
-   {x:1700, y:160 }
-
 ]
 var tintasImg = []
 var countTintas = 0
 var life = 3
-var paintPalette, paintPaletteImg
+var mixingBowl, mixingBowlImg
 var gameState = "PLAY"
 
 function preload() {
@@ -57,7 +56,7 @@ function preload() {
    tinta3Img = loadImage("./assets/red_paint.png")
    tinta4Img = loadImage("./assets/white_paint.png")
    tinta5Img = loadImage("./assets/yellow_paint.png")
-   paintPaletteImg = loadImage("./assets/paint_palette.png")
+   mixingBowlImg = loadImage("./assets/paint_palette.png")
 }
 
 function setup() {
@@ -77,10 +76,8 @@ function setup() {
    heart3.addImage(heartImg)
    heart3.scale = 0.2
 
-   paintPalette = createSprite(1800, 250)
-   paintPalette.addImage(paintPaletteImg)
-   paintPalette.scale = 0.6
-   paintPalette.visible = false
+   mixingBowl = createSprite(1700, 270)
+   mixingBowl.addImage(mixingBowlImg)
 
 
    tintasImg = [
@@ -153,11 +150,11 @@ function draw() {
 
          // Velocida oposta a garota ficou 2
       } else if (bearDirection == "right" && girlDirection == "left") {
-         bearGroup.setVelocityXEach(1.5)
+         bearGroup.setVelocityXEach(2)
          bearGroup.setMirrorXEach(1)
          bearDirection = "left"
       } else if (bearDirection == "left" && girlDirection == "right") {
-         bearGroup.setVelocityXEach(-1.5)
+         bearGroup.setVelocityXEach(-2)
          bearGroup.setMirrorXEach(-1)
          bearDirection = "right"
 
@@ -175,11 +172,11 @@ function draw() {
          beeGroup.setMirrorXEach(-1)
          beeDirection = "left"
       } else if (beeDirection == "left" && girlDirection == "right") {
-         beeGroup.setVelocityXEach(-1.5)
+         beeGroup.setVelocityXEach(-2)
          beeGroup.setMirrorXEach(1)
          beeDirection = "right"
       } else if (beeDirection == "right" && girlDirection == "left") {
-         beeGroup.setVelocityXEach(1.5)
+         beeGroup.setVelocityXEach(2)
          beeGroup.setMirrorXEach(-1)
          beeDirection = "left"
       }
@@ -196,11 +193,11 @@ function draw() {
          wolfDirection = "right"
 
       }else if (wolfDirection == "right" && girlDirection == "left") {
-         wolfGroup.setVelocityXEach(1.5)
+         wolfGroup.setVelocityXEach(2)
          wolfGroup.setMirrorXEach(1)
          wolfDirection = "left"
       } else if (wolfDirection == "left" && girlDirection == "right"){
-         wolfGroup.setVelocityXEach(-1.5)
+         wolfGroup.setVelocityXEach(-2)
          wolfGroup.setMirrorXEach(-1)
          wolfDirection = "right"
 
@@ -231,30 +228,21 @@ function draw() {
    tintasCollect()
 
    if(countTintas == 5){
-      paintPalette.visible = true
+      
    }
 }
-
-   if(girl.overlap(paintPalette)){
-      text("Parabéns, você pegou todas as tintas!", 700, 350)
-      paintPalette.remove()
-      bearGroup.destroyEach()
-      beeGroup.destroyEach()
-      wolfGroup.destroyEach()
-   }
 
    if(gameState == "END"){
       textSize(20)
       text("Acabaram suas vidas", )
-      
+      text("Clique no botão para recomeçar",)
       
    }
 
    drawSprites()
    text("x:" + mouseX + "y:" + mouseY, mouseX, mouseY)
    text("Tintas:"+countTintas, 585, 15)
-
-   
+  
    
 
 }
@@ -263,7 +251,6 @@ function playerControls() {
    bg.velocityX = 0
    plataformas.setVelocityXEach(0)
    tintas.setVelocityXEach(0)
-   paintPalette.velocityX = 0
    girl.collide(solo)
    girl.velocityY += 0.8
    girl.changeAnimation("girlBlink")
@@ -275,7 +262,6 @@ function playerControls() {
       bg.velocityX = -1
       plataformas.setVelocityXEach(-1)
       tintas.setVelocityXEach(-1)
-      paintPalette.velocityX = -1
       girl.x += 1
       girlDirection = "right"
    }
@@ -287,7 +273,6 @@ function playerControls() {
       bg.velocityX = 1
       plataformas.setVelocityXEach(1)
       tintas.setVelocityXEach(1)
-      paintPalette.velocityX = 1
       girlDirection = "left"
    }
 
