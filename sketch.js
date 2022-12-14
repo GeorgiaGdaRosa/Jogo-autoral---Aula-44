@@ -6,7 +6,7 @@ var plataformaPosition = [
    { x: 500, y: 200 },
    { x: 1000, y: 220 },
    { x: 1500, y: 230 },
-   { x: 1700, y: 183 }
+   { x: 1700, y: 180 }
 ]
 var plataformas
 var plataformaImg
@@ -41,6 +41,7 @@ var countTintas = 0
 var life = 3
 var mixingBowl, mixingBowlImg
 var gameState = "PLAY"
+var resetButton, resetButtonImg
 
 function preload() {
    backgroundImg = loadImage("./assets/background2.png")
@@ -57,6 +58,7 @@ function preload() {
    tinta4Img = loadImage("./assets/white_paint.png")
    tinta5Img = loadImage("./assets/yellow_paint.png")
    mixingBowlImg = loadImage("./assets/paint_palette.png")
+   resetButtonImg = loadImage("./assets/resetButton.png")
 }
 
 function setup() {
@@ -81,13 +83,13 @@ function setup() {
    mixingBowl.scale = 0.6
    mixingBowl.visible = false 
 
-
+  
    tintasImg = [
       tinta1Img, tinta2Img, tinta3Img, tinta4Img, tinta5Img
    ]
 
    
-
+   
    girl = createSprite(30, 240)
    girlBlink.frameDelay = 10
    girl.addAnimation("girlBlink", girlBlink)
@@ -109,6 +111,11 @@ function setup() {
    spawBees()
    spawWolfs()
 
+   resetButton = createSprite(360,200)
+   resetButton.addImage(resetButtonImg)
+   resetButton.scale = 0.05
+   resetButton.visible = false 
+
    tintas = new Group()
    for(var i = 0;i < tintasPositions.length; i++) {
       var tinta= createSprite(tintasPositions[i].x, tintasPositions[i].y, 20, 20)
@@ -119,6 +126,7 @@ function setup() {
       tintas.add(tinta)
 }
 }
+
 
 function draw() {
    background(220)
@@ -234,17 +242,44 @@ function draw() {
    }
 }
 
-   if(gameState == "END"){
-      textSize(20)
-      text("Acabaram suas vidas", 200, 200)
-      text("Clique no botão para recomeçar",)
-      
-   }
+  if(mousePressedOver(resetButton)){
+   reset()
+  }
 
    drawSprites()
    text("x:" + mouseX + "y:" + mouseY, mouseX, mouseY)
    text("Tintas:"+countTintas, 585, 15)
+
+   if(gameState == "END"){
+      fill("black")
+      textSize(25)
+      text("Acabaram suas vidas", 220, 130)
+      resetButton.visible = true
+      bg.velocityX = 0
+      girl.destroy()
+      tintas.setVelocityXEach(0)
+      plataformas.setVelocityXEach(0)
+      bearGroup.destroyEach()
+      beeGroup.destroyEach()
+      wolfGroup.destroyEach()
+   }
   
+   girl.overlap(mixingBowl,(collector, collected)=>{
+      fill("black")
+      textSize(25)
+      text("Parabéns você coletou todas as tintas!", 150, 130)
+      girl.velocityX = 0
+      bg.velocityX = 0
+      mixingBowl.velocityX = 0
+      tintas.setVelocityXEach(0)
+      plataformas.setVelocityXEach(0)
+      bearGroup.setVelocityXEach(0)
+      beeGroup.setVelocityXEach(0)
+      wolfGroup.setVelocityXEach(0)
+      
+   })
+      
+
    
 
 }
@@ -370,4 +405,16 @@ function tintasCollect(){
       collected.remove()
    })
 
+}
+
+function reset(){
+   gameState = "PLAY"
+   resetButton.visible = false
+   countTintas = 0
+   heart1.visible = true
+   heart2.visible = true
+   heart3.visible = true
+  
+   bg.x = 350
+   girl.x = 30
 }
