@@ -408,13 +408,13 @@ function tintasCollect(){
 }
 
 function reset(){
-   gameState = "PLAY"
-   resetButton.visible = false
-   countTintas = 0
-   heart1.visible = true
-   heart2.visible = true
-   heart3.visible = true
-  
-   bg.x = 350
-   girl.x = 30
+   // gameState = "PLAY"
+   // resetButton.visible = false
+   // countTintas = 0
+   // heart1.visible = true
+   // heart2.visible = true
+   // heart3.visible = true
+  location.reload()
+   // bg.x = 350
+   // girl.x = 30
 }
